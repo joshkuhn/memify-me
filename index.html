@@ -2,18 +2,21 @@
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="js/memify.js"></script>
+    <script type="text/javascript" src="js/memeify.js"></script>
     <script type="text/javascript">
+        
     $( window ).load(function() {
         console.log( "ready!" );
+        var memeify = new Memeify();
     });
+    
     </script>
 
     <link rel="stylesheet" type="text/css" href="css/basics.css"></link>
 
 </head>
 <body>
-    <canvas id="memeCanvas">
+    <canvas id="memeCanvas" height="480" width="640">
 
 </body>
 </html>
