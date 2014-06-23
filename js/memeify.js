@@ -22,7 +22,7 @@ function Memeify( config ) {
     
     var testImageURI = config.baseImgPath + "GrumpyCat.jpg";
     this.setImage(testImageURI);
-    this.setText("2AM Coding Session", "Not drunk");     
+    this.setText("Can haz cheezburger?", "NO");     
     
     this.drawToCanvas();
 }
@@ -71,7 +71,14 @@ Memeify.prototype.drawToCanvas = function() {
     this.canvas.height = this.canvas.width / imgAspect;
     this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = "60px Arial";
+    this.ctx.font = "60px Impact";
+    
+    this.ctx.fillStyle = "#FFF";
+    this.ctx.fillText(this.upperText, 40, 40);
+    this.ctx.fillText(this.lowerText, 40, this.canvas.height - 100);
+
+    this.ctx.fillStyle = "#000";
+    this.ctx.lineWidth = 2.5;
     this.ctx.strokeText(this.upperText, 40, 40);
     this.ctx.strokeText(this.lowerText, 40, this.canvas.height - 100);
 
