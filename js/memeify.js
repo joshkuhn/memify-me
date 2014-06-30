@@ -1,31 +1,41 @@
 function Memeify( config ) {
+    this.init(config);
+
+    this.resizeCanvas( this.canvas );    
     
+    this.setDefaultMeme();     
+    
+    this.drawToCanvas();
+}
+
+Memeify.prototype.init = function( config ) {    
     if (config == undefined) {
-        config = {
+        this.config = {
             baseImgPath: "img/",
             outputPath: "memes/", 
             canvasId: "memeCanvas"
         };
-    } 
+    } else {
+        this.config = config;
+    }
 
     this.DEBUG = false;
     this.currentImageURI = null;
-    this.canvas = document.getElementById(config.canvasId);
+    this.canvas = document.getElementById(this.config.canvasId);
     this.ctx = this.canvas.getContext("2d");
 
     this.img = null;
     this.imgURI = null;
     this.upperText = "";
     this.lowerText = "";
+};
 
-    this.resizeCanvas( this.canvas );    
-    
-    var testImageURI = config.baseImgPath + "GrumpyCat.jpg";
+Memeify.prototype.setDefaultMeme = function() {
+    var testImageURI = this.config.baseImgPath + "GrumpyCat.jpg";
     this.setImage(testImageURI);
-    this.setText("Can haz cheezburger?", "NO");     
-    
-    this.drawToCanvas();
-}
+
+    this.setText("Can haz cheezburger?", "NO");
+};
 
 Memeify.prototype.setText = function( upperText, lowerText ) {
     this.upperText = upperText;
@@ -71,16 +81,48 @@ Memeify.prototype.drawToCanvas = function() {
     this.canvas.height = this.canvas.width / imgAspect;
     this.ctx.drawImage(this.img, 0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.font = "60px Impact";
-    
+    var upperSize = this.suggestFontSize(this.upperText)
+    var lowerSize = this.suggestFontSize(this.lowerText)
+
+    var canvasCenter = this.canvas.width / 2;
+    var upperBaseline = upperSize / 16;
+    var lowerBaseline = this.canvas.height - (lowerSize + lowerSize / 8);
+
+    this.ctx.textAlign = "center";
+    this.ctx.textBaseline = "top";
+
+    this.ctx.font = upperSize.toString() + "px Impact";  
+    this.fillAndStrokeText(this.upperText, canvasCenter, upperBaseline);
+
+    this.ctx.font = lowerSize.toString() + "px Impact";
+    this.fillAndStrokeText(this.lowerText, canvasCenter, lowerBaseline);
+};
+
+Memeify.prototype.fillAndStrokeText = function (text, xPos, yPos) {
     this.ctx.fillStyle = "#FFF";
-    this.ctx.fillText(this.upperText, 40, 40);
-    this.ctx.fillText(this.lowerText, 40, this.canvas.height - 100);
+    this.ctx.fillText(text, xPos, yPos);
 
     this.ctx.fillStyle = "#000";
     this.ctx.lineWidth = 2.5;
-    this.ctx.strokeText(this.upperText, 40, 40);
-    this.ctx.strokeText(this.lowerText, 40, this.canvas.height - 100);
+    this.ctx.strokeText(text, xPos, yPos);
+}
 
+Memeify.prototype.suggestFontSize = function( text ) {
+    var minSize = 10;
+    var maxSize = this.canvas.height / 4;
+    var suggestedSize = minSize;
+
+    var imgPadding = 10;
+    
+    for (var i = minSize; i <= maxSize; i += 5) {
+        this.ctx.font = i.toString() + "px Impact";
+        var curWidth = this.ctx.measureText(text).width
+        if (curWidth <= this.canvas.width - imgPadding) {
+            suggestedSize = i;
+        } else {
+            break;
+        }
+    }
+
+    return suggestedSize;
 };
-
