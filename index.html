@@ -1,22 +1,41 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/default.css"></link>
+
     <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="js/memeify.js"></script>
     <script type="text/javascript">
         
-    $( window ).load(function() {
+    $(window).load(function() {
         console.log( "ready!" );
-        var memeify = new Memeify();
-    });
-    
-    </script>
+        memeify = new Memeify();
 
-    <link rel="stylesheet" type="text/css" href="css/basics.css"></link>
+        $(".memeTextInput").on("input onpropertychange", function() {
+            console.log("   Updating meme text...");
+            var upper = $("#upperText").val();
+            var lower = $("#lowerText").val();
+            memeify.setText(upper, lower);
+            memeify.drawToCanvas();
+            console.log("      ...Done.");
+        });
+        
+    });
+
+
+
+    </script>    
 
 </head>
 <body>
-    <canvas id="memeCanvas" height="480" width="640">
-
+    <div id="main">
+        <div id="canvasContainer">
+            <canvas id="memeCanvas" height="480" width="640"/>
+        </div>  
+        <div id="sideBar">
+            <textarea id="upperText" class="memeTextInput" ></textarea>
+            <textarea id="lowerText" class="memeTextInput"></textarea>            
+        </div>
+    </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 function Memeify( config ) {
     this.init(config);
 
-    this.resizeCanvas( this.canvas );    
+    this.resizeCanvas();    
     
     this.setDefaultMeme();     
     
@@ -42,16 +42,14 @@ Memeify.prototype.setText = function( upperText, lowerText ) {
     this.lowerText = lowerText;    
 };
 
-Memeify.prototype.resizeCanvas = function( canvas ) {
+Memeify.prototype.resizeCanvas = function() {
 
     // Scale dynamically to window size if the window is too small
     if ($(window).width() < 640) {
-        var currentAspect = canvas.width / canvas.height;
-        canvas.width = $(window).width();
-        canvas.height = $(window).width() / currentAspect;
+        var currentAspect = this.canvas.width / this.canvas.height;
+        this.canvas.width = $(window).width();
+        this.canvas.height = $(window).width() / currentAspect;
     }
-
-    return canvas;
 };
 
 Memeify.prototype.setImage = function( imageURI ) {
